@@ -11,7 +11,7 @@ var sb;
  * The name of your app. Change this!
  * @type {String}
  */
-var appName = "MyCoolApp";
+var appName = "MAJ";
 
 /**
  * Often times, you want to randomize your name.
@@ -28,11 +28,25 @@ var doRandomName = true;
 window.onload = function () {
 	setupSpacebrew();
 	setupUI();
+//will get called every time the mouse moves.
+	document.body.onmousemove = function(e){
+		sb.send("mouse","range",String( e.clientX) );
+
+
+	}
 }
 
 /**
  * Setup Spacebrew object & range catcher
  */
+
+/* same thing as below
+var setupSpacebrew = function(){
+
+
+
+} */
+
 function setupSpacebrew(){
 
 	if ( doRandomName ){
@@ -46,15 +60,17 @@ function setupSpacebrew(){
 	sb.name(appName);
 
 	// add publishers and subscribers
-	// sb.addPublish("name", "range");
-	// sb.addSubscribe("name", "range");
+	 sb.addPublish("mouse", "range");
+	 sb.addSubscribe("background", "range");
 
 	// setup listeners
+	//does the connection, assignming object method to a function in your app.
+	//sb.onBooleanMessage = function(name,value)
 	sb.onBooleanMessage = onBooleanMessage;
 	sb.onStringMessage = onStringMessage;
 	sb.onRangeMessage = onRangeMessage;
 	sb.onCustomMessage = onCustomMessage;
-	sb.connect();
+	sb.connect(); //
 }
 
 /**
@@ -80,6 +96,11 @@ function onStringMessage( name, value ){
  * @param  {Number} value
  */
 function onRangeMessage( name, value ){
+
+	if (name == "background"){
+
+		document.body.style.backgroundColor = "rgb(" + value + "," + value + "," + value + ")";
+	}
 	// do some stuff!
 	console.log("Range: "+name+":"+value);
 }
